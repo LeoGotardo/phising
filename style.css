@@ -58,9 +58,11 @@ body {
   font-family: var(--font);
   font-size: 16px;
   color: var(--text-primary);
-  background: var(--bg);
+  background-color: var(--bg);
   background-image:
-    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(121, 192, 255, 0.06) 0%, transparent 70%);
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(121, 192, 255, 0.07) 0%, transparent 70%),
+    radial-gradient(circle, rgba(48, 54, 61, 0.9) 1px, transparent 1px);
+  background-size: 100% 100%, 28px 28px;
   min-height: 100vh;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -72,6 +74,33 @@ body {
   flex-direction: column;
   min-height: 100vh;
   padding: 0 var(--md);
+  position: relative;
+  isolation: isolate;
+}
+
+.page::before,
+.page::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.page::before {
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(121, 192, 255, 0.05) 0%, transparent 65%);
+  top: -250px;
+  right: -200px;
+}
+
+.page::after {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(126, 231, 135, 0.04) 0%, transparent 65%);
+  bottom: -200px;
+  left: -180px;
 }
 
 .main {

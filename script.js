@@ -282,10 +282,18 @@ resetBtn.addEventListener('click', () => {
 function setLoading(on) {
   submitBtn.disabled = on;
   btnText.textContent = on ? 'Analisando…' : 'Verificar Site';
-  btnIcon.setAttribute('data-lucide', on ? 'loader-2' : 'search');
-  if (on) btnIcon.classList.add('spin');
-  else btnIcon.classList.remove('spin');
+
+  const newIcon = document.createElement('i');
+  newIcon.id = 'btn-icon';
+  newIcon.setAttribute('data-lucide', on ? 'loader-2' : 'search');
+  if (on) newIcon.classList.add('spin');
+
+  const current = submitBtn.querySelector('#btn-icon') ?? submitBtn.querySelector('svg') ?? btnIcon;
+  current.replaceWith(newIcon);
   lucide.createIcons({ nodes: [submitBtn] });
 }
 
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ── Init ─────────────────────────────────────────── */
+lucide.createIcons();
