@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phishing Detector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="page">
+
+    <header class="header">
+      <div class="header-logo">
+        <i data-lucide="shield"></i>
+      </div>
+      <h1 class="header-title">Phishing Detector</h1>
+      <p class="header-subtitle">Verifique se um site é seguro antes de inserir seus dados</p>
+    </header>
+
+    <main class="main">
+
+      <form onsubmit="verifyDomain(event)" class="form" id="form" novalidate>
+        <div class="input-wrapper" id="input-wrapper">
+          <span class="input-icon-prefix"><i data-lucide="link-2"></i></span>
+          <input
+            class="url-input"
+            id="url-input"
+            type="text"
+            placeholder="Cole ou digite o endereço do site…"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button class="input-clear" id="clear-btn" type="button" aria-label="Limpar" hidden>
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <button class="btn-primary" id="submit-btn" type="submit">
+          <span class="btn-inner">
+            <i data-lucide="search" id="btn-icon"></i>
+            <span id="btn-text">Verificar Site</span>
+          </span>
+        </button>
+      </form>
+
+      <section class="result-section" id="result-section" hidden>
+
+        <div class="result-card" id="result-card">
+
+          <div class="result-card__top" id="result-top">
+            <div class="result-status-icon" id="result-icon">
+              <i data-lucide="loader-2" class="spin"></i>
+            </div>
+            <div class="result-status-info">
+              <span class="result-label" id="result-label">Analisando…</span>
+              <span class="result-url"   id="result-url"></span>
+            </div>
+          </div>
+
+          <div class="result-card__body">
+            <span class="body-section-label">Verificações</span>
+            <ul class="checklist" id="checklist"></ul>
+          </div>
+
+        </div>
+
+        <div class="alert-banner" id="alert-banner" hidden>
+          <div class="alert-banner__header" id="alert-header">
+            <i data-lucide="triangle-alert"></i>
+            <strong id="alert-title"></strong>
+          </div>
+          <ul class="alert-steps" id="alert-steps"></ul>
+        </div>
+
+        <button class="btn-secondary" id="reset-btn" type="button">
+          <i data-lucide="rotate-ccw"></i>
+          Verificar outro site
+        </button>
+
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Resultados baseados em análise local e consulta a blacklists públicas.</p>
+    </footer>
+
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
