@@ -24,9 +24,7 @@ const resetBtn      = document.getElementById('reset-btn');
 const SOURCES = [
   { key: 'gsb',       label: 'Google Safe Browsing', icon: 'globe'    },
   { key: 'vt',        label: 'VirusTotal',            icon: 'bug'      },
-  { key: 'phishtank', label: 'PhishTank',             icon: 'fish'     },
   { key: 'urlhaus',   label: 'URLhaus',               icon: 'link-2'   },
-  { key: 'dnstwist',  label: 'DNSTwist',              icon: 'radar'    },
   { key: 'local',     label: 'Análise local',         icon: 'scan'     },
 ];
 
@@ -206,8 +204,8 @@ async function runAnalysis(url) {
 
   resolveItem('local', local);
 
-  const order = ['gsb', 'vt', 'phishtank', 'urlhaus', 'dnstwist'];
-  const gaps  = [380, 260, 180, 140, 200];
+  const order = ['gsb', 'vt', 'urlhaus'];
+  const gaps  = [380, 260, 180];
 
   for (let i = 0; i < order.length; i++) {
     await delay(gaps[i]);
