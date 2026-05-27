@@ -32,7 +32,7 @@ def getGSB(url):
         if data.get('matches'):
             return {'status': 'bad', 'detail': 'phishing detectado'}
         return {'status': 'ok', 'detail': 'sem ameaças'}
-    except requests.exceptions.RequestException:
+    except Exception:
         return {'status': 'warn', 'detail': 'erro ao consultar'}
 
 
@@ -68,7 +68,7 @@ def getVT(url):
         if suspicious > 0:
             return {'status': 'warn', 'detail': f'{suspicious}/{total} engines'}
         return {'status': 'ok', 'detail': f'0/{total} engines'}
-    except requests.exceptions.RequestException:
+    except Exception:
         return {'status': 'warn', 'detail': 'erro ao consultar'}
 
 

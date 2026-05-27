@@ -80,26 +80,30 @@ function levenshtein(a, b) {
   return dp[m][n];
 }
 
+function getRegisteredDomain(hostname) {
+  const parts  = hostname.split('.');
+  const last2  = parts.slice(-2).join('.');
+  const cc2    = ['com.br','org.br','net.br','co.uk','com.au','co.nz','co.jp','com.ar','com.mx'];
+  return (cc2.includes(last2) && parts.length >= 3)
+    ? parts.slice(-3).join('.')
+    : last2;
+}
+
 function localAnalysis(hostname) {
-  const domain = hostname.split('.')[0];
-  const norm   = digitNormalize(domain);
+  const registered = getRegisteredDomain(hostname);
+  const sld        = registered.split('.')[0];
+  const norm       = digitNormalize(sld);
 
   for (const brand of BRANDS) {
-    // subdomain trick: brand appears in subdomain but not as registered domain
-    if (hostname.includes(brand) && !hostname.startsWith(brand + '.')) {
+    if (hostname.includes(brand) && !registered.startsWith(brand)) {
       return { status: 'bad', detail: `imita "${brand}"` };
     }
-    // digit substitution / levenshtein
-    if (norm !== domain && norm.includes(brand)) {
-      return { status: 'bad', detail: `"${domain}" imita "${brand}"` };
+    if (norm !== sld && norm.includes(brand)) {
+      return { status: 'bad', detail: `"${sld}" imita "${brand}"` };
     }
     if (levenshtein(norm, brand) <= 1 && norm !== brand) {
       return { status: 'warn', detail: `similar a "${brand}"` };
     }
-  }
-
-  if (!hostname.startsWith('https') && /^http:/.test(hostname)) {
-    return { status: 'warn', detail: 'sem HTTPS' };
   }
 
   return { status: 'ok', detail: 'domínio legítimo' };

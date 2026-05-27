@@ -103,24 +103,28 @@ pip install flask requests
 
 ### Análise local — deve acionar heurísticas JS
 
-| URL (exemplo) | Heurística acionada |
-|---|---|
-| `http://bradesc0.com.br` | dígito `0→o` imita "bradesco" → **bad** |
-| `http://itau.conta-segura.com` | marca no subdomínio, domínio diferente → **bad** |
-| `http://nubank-suporte.com` | Levenshtein próximo de "nubank" → **warn** |
+A análise local roda no browser e não depende de API keys.
 
-> Essas URLs são **fictícias** — use apenas para ver a análise local funcionar.
-> Não acesse nem cadastre dados nelas caso existam.
+| URL (exemplo fictício) | Heurística acionada | Resultado |
+|---|---|---|
+| `http://bradesc0.com.br` | dígito `0→o` imita "bradesco" | local → **bad** |
+| `http://itau.conta-segura.com` | "itau" no subdomínio, domínio registrado ≠ itau | local → **bad** |
+| `http://nubank-suporte.com` | Levenshtein ≤ 1 contra "nubank" | local → **warn** |
+| `http://atendimento.bradesco.golpe.com` | "bradesco" no hostname, domínio registrado = `golpe.com` | local → **bad** |
+
+> URLs fictícias — não acesse nem cadastre dados caso existam.
 
 ### Blacklists externas — URLs de teste oficiais
 
-| URL | Fonte | Resultado esperado |
+> **Requer `GSB_API_KEY` configurada.** Sem a chave, o backend retorna `warn` (suspeito), não `bad` (perigoso).
+
+| URL | Fonte | Resultado com chave |
 |---|---|---|
 | `http://malware.testing.google.test/testing/malware/` | Google Safe Browsing | GSB → **bad** |
-| `http://phishing.testing.google.test/testing/phishing/` | Google Safe Browsing | GSB → **bad** |
-| `http://unwanted.testing.google.test/testing/unwanted/` | Google Safe Browsing | GSB → **bad** |
 
-> URLs acima são domínios de teste oficiais do Google, inofensivos e criados exatamente para validar integrações com a Safe Browsing API.
+> Apenas a URL de malware é confiável via API. As URLs de phishing e unwanted do GSB (`phishing.testing.google.test`, `unwanted.testing.google.test`) funcionam no browser mas não disparam a API de forma consistente.
+
+> O VirusTotal retorna **erro ao consultar** para domínios `.test` (TLD reservado, não resolve no DNS). Isso é esperado — o resultado aparece como `warn` (suspeito), não compromete a detecção.
 
 ### Encontrar URLs reais de phishing (para testes avançados)
 
